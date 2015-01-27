@@ -32,10 +32,54 @@ server.on('listening', onListening);
 // socket.io
 var io = require('socket.io').listen(server);
 
+var SCREEN_SIZE = 500;                    // キャンバスの幅
+var SIDE_CELLS = 100;                     // 一辺のセルの数
+var FPS = 10;                             // フレームレート
+
+field = new Array(SIDE_CELLS*SIDE_CELLS); // フィールド情報
+var tempField = new Array(SIDE_CELLS*SIDE_CELLS); // フィールド情報の一時記憶用
+for (var i=0; i<field.length; i++) field[i] = Math.floor(Math.random()*2); // ランダムに「生」「死」を格納
+
+function update(socket, field, test) {
+	var n = 0;                    // 自身のまわりにある「生」の数
+	tempField = field.slice(); // 複製
+	// console.log(tempField[test]);
+	for (var i=0; i<tempField.length; i++) {
+		n = 0;
+		for (var s=-1; s<2; s++) {
+			for (var t=-1; t<2; t++) {
+				if (s==0 && t==0) continue; // 自身はカウントしない
+				var c = i+s*SIDE_CELLS+t;   // チェックするセル
+					if (c>=0 && c<tempField.length) { // 配列からはみ出していないか(上下の壁判定も兼ねて)
+						if (i<c && c%SIDE_CELLS!=0 || i>c && c%SIDE_CELLS!=SIDE_CELLS-1) { // 左右の壁判定
+							if (tempField[c]) n ++; // 「生」だったらカウント
+						}
+					}
+			}
+		}
+		if (tempField[i] && (n==2||n==3)) { // 自身が「生」でカウントが2か3
+			field[i] = 1;    // 「生」
+		} else if (!tempField[i] && n==3) { // 自身が「死」でカウントが3
+			field[i] = 1;    // 「生」
+		} else field[i] = 0; // 「死」
+	}
+	// console.log(field[test]);
+	io.sockets.emit('send', field);                                    // canvasを更新
+}
+
 io.sockets.on('connection', function(socket){
 
+	socket.on('click', function(x, y){
+		if(!x) {
+		} else if(!y) {
+		} else {
+			field[x * SIDE_CELLS + y] = 1;
+		}
+		// console.log(field[x * SIDE_CELLS + y]);
+		
+		update(socket, field, x * SIDE_CELLS + y);
+	});
 });
-
 
 /**
  * Normalize a port into a number, string, or false.
