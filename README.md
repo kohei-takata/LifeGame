@@ -1,5 +1,6 @@
 # LifeGame
 ライフゲーム
 
+ゲームの根幹の部分は
 https://gist.github.com/ottatiyarou/6560440
-を写経させていただきました。
+を参考にさせていただきました。
