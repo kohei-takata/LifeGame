@@ -75,10 +75,9 @@ function update() {
 io.sockets.on('connection', function(socket){
 	update();
 	
-	socket.on('click', function(x, y) {
-		field[5] = 1;
-		field[4] = 1;
-		field[3] = 1;
+	socket.on('click', function(i) {
+		field[i] = 1;
+		console.log(i);
 	});
 });
 
