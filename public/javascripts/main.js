@@ -20,6 +20,7 @@ window.onload = function() {
 		var mouseY = Math.round(e.clientY - rect.top);
 	
 		context.fillRect(mouseX, mouseY, CELL_SIZE, CELL_SIZE);
+		socket.emit('click', mouseX, mouseY);
 	};
 
 	context = canvas.getContext('2d');                // コンテキスト
