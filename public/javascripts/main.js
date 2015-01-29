@@ -20,18 +20,6 @@ window.onload = function() {
 		var mouseY = Math.round(e.clientY - rect.top);
 	
 		context.fillRect(mouseX, mouseY, CELL_SIZE, CELL_SIZE);
-		
-		var huga = 0;
-		var hoge = setInterval(function() {
-			    console.log(huga);
-			        huga++;
-				    //終了条件
-				        if (huga == 10) {
-				            clearInterval(hoge);
-				                console.log("終わり");
-				                    }
-				                    }, 500);
-		socket.emit('click', mouseX, mouseY);
 	};
 
 	context = canvas.getContext('2d');                // コンテキスト
@@ -40,7 +28,6 @@ window.onload = function() {
 
 socket.on('send', function(field){
 	draw(field);
-	socket.emit('click', null, null);
 });
 
 function draw(field) {

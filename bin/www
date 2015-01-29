@@ -40,10 +40,9 @@ field = new Array(SIDE_CELLS*SIDE_CELLS); // フィールド情報
 var tempField = new Array(SIDE_CELLS*SIDE_CELLS); // フィールド情報の一時記憶用
 for (var i=0; i<field.length; i++) field[i] = Math.floor(Math.random()*2); // ランダムに「生」「死」を格納
 
-function update(socket, field, test) {
+function update() {
 	var n = 0;                    // 自身のまわりにある「生」の数
 	tempField = field.slice(); // 複製
-	// console.log(tempField[test]);
 	for (var i=0; i<tempField.length; i++) {
 		n = 0;
 		for (var s=-1; s<2; s++) {
@@ -63,22 +62,12 @@ function update(socket, field, test) {
 			field[i] = 1;    // 「生」
 		} else field[i] = 0; // 「死」
 	}
-	// console.log(field[test]);
 	io.sockets.emit('send', field);                                    // canvasを更新
+	setTimeout(update, 1000/FPS); // 再帰
 }
 
 io.sockets.on('connection', function(socket){
-
-	socket.on('click', function(x, y){
-		if(!x) {
-		} else if(!y) {
-		} else {
-			field[x * SIDE_CELLS + y] = 1;
-		}
-		// console.log(field[x * SIDE_CELLS + y]);
-		
-		update(socket, field, x * SIDE_CELLS + y);
-	});
+	update();
 });
 
 /**
