@@ -27,7 +27,6 @@ window.onload = function() {
 		if(mouseDownFlag) getLocalAddress(e);
 	};
 	function onMouseUp(e) {
-		getLocalAddress(e);
 		mouseDownFlag = false;
 	};
 	function onMouseOut(e) {
@@ -38,7 +37,12 @@ window.onload = function() {
 		var mouseX = Math.floor((e.pageX - rect.left)/5);
 		var mouseY = Math.floor(e.pageY/5);
 
-		localField[mouseX + SIDE_CELLS * mouseY] = 1;
+		var localNumber = mouseX + SIDE_CELLS * mouseY;
+		if(localField[localNumber] == null) {
+			localField[localNumber] = 1;
+		} else {
+			localField[localNumber] = null;
+		}
 	};
 	function onKeyup(e) {
 		for(var i = 0;i < localField.length;i++) {
@@ -65,7 +69,7 @@ function draw(field) {
 		var x = (i%SIDE_CELLS)*CELL_SIZE;             // x座標
 		var y = Math.floor((i/SIDE_CELLS))*CELL_SIZE; // y座標
 		if (field[i]) context.fillRect(x, y, CELL_SIZE, CELL_SIZE); // 「生」を描画
-		if(localField[i]) localDraw(x, y);
+		if(localField[i] == 1) localDraw(x, y);
 	}
 }
 
