@@ -35,8 +35,8 @@ window.onload = function() {
 	};
 	function getLocalAddress(e) {
 		var rect = e.target.getBoundingClientRect();
-		var mouseX = Math.floor((e.layerX - rect.left)/5);
-		var mouseY = Math.floor(e.layerY/5);
+		var mouseX = Math.floor((e.pageX - rect.left)/5);
+		var mouseY = Math.floor(e.pageY/5);
 
 		localField[mouseX + SIDE_CELLS * mouseY] = 1;
 	};
