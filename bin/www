@@ -36,15 +36,9 @@ var SCREEN_SIZE = 500;                    // キャンバスの幅
 var SIDE_CELLS = 100;                     // 一辺のセルの数
 var FPS = 10;                             // フレームレート
 
-test = {
-	_bar: new Array(SIDE_CELLS*SIDE_CELLS),
-	hoge: function() {
-		return this._bar;
-	}
-};
 var field = new Array(SIDE_CELLS*SIDE_CELLS); // フィールド情報
 var tempField = new Array(SIDE_CELLS*SIDE_CELLS); // フィールド情報の一時記憶用
-for (var i=0; i<field.length; i++) field[i] = Math.floor(Math.random()*2); // ランダムに「生」「死」を格納
+// for (var i=0; i<field.length; i++) field[i] = Math.floor(Math.random()*2); // ランダムに「生」「死」を格納
 
 function update() {
 	var n = 0;                    // 自身のまわりにある「生」の数
@@ -69,7 +63,7 @@ function update() {
 		} else field[i] = 0; // 「死」
 	}
 	io.sockets.emit('send', field);                                    // canvasを更新
-	setTimeout(update, 10000/FPS); // 再帰
+	setTimeout(update, 5000/FPS); // 再帰
 }
 
 io.sockets.on('connection', function(socket){
@@ -77,7 +71,6 @@ io.sockets.on('connection', function(socket){
 	
 	socket.on('click', function(i) {
 		field[i] = 1;
-		console.log(i);
 	});
 });
 

@@ -11,19 +11,34 @@ var localField = new Array(SIDE_CELLS*SIDE_CELLS);
 window.onload = function() {
 	canvas = document.getElementById('world'); // canvas要素を取得
 	canvas.width = canvas.height = SCREEN_SIZE; // キャンバスのサイズを設定
-	var scaleRate = Math.min(window.innerHeight/SCREEN_SIZE, window.innerHeight/SCREEN_SIZE); // Canvas引き伸ばし率の取得
-//	canvas.style.width = canvas.style.height = SCREEN_SIZE*scaleRate+'px';  // キャンバスを引き伸ばし
-	
-	canvas.addEventListener('click', onClick, false);
+
+	// canvas.addEventListener('click', onClick, false);
+	canvas.addEventListener('mousedown', onMouseDown, false);
+	canvas.addEventListener('mousemove', onMouseMove, false);
+	canvas.addEventListener('mouseup', onMouseUp, false);
+	canvas.addEventListener('mouseout', onMouseOut, false);
 	document.addEventListener('keyup', onKeyup, false);
-	function onClick(e) {
+	var mouseDownFlag = false;
+	function onMouseDown(e) {
+		getLocalAddress(e);
+		mouseDownFlag = true;
+	};
+	function onMouseMove(e) {
+		if(mouseDownFlag) getLocalAddress(e);
+	};
+	function onMouseUp(e) {
+		getLocalAddress(e);
+		mouseDownFlag = false;
+	};
+	function onMouseOut(e) {
+		mouseDownFlag = false;
+	};
+	function getLocalAddress(e) {
 		var rect = e.target.getBoundingClientRect();
-		var mouseX = Math.floor(e.clientX - rect.left);
-		var mouseY = Math.floor(e.clientY);
-	
-//		localDraw(mouseX, mouseY);
-		console.log('x:' + mouseX + ' y:' + mouseY);
-		localField[Math.floor(mouseX + (SIDE_CELLS * mouseY)/5)] = 1;
+		var mouseX = Math.floor((e.layerX - rect.left)/5);
+		var mouseY = Math.floor(e.layerY/5);
+
+		localField[mouseX + SIDE_CELLS * mouseY] = 1;
 	};
 	function onKeyup(e) {
 		for(var i = 0;i < localField.length;i++) {
@@ -35,7 +50,6 @@ window.onload = function() {
 }
 
 function localDraw(x, y){
-	console.log('d x:' + x + ' y:' + y);
 	context.fillStyle = 'rgb(255, 255, 255)';
 	context.fillRect(x, y, CELL_SIZE, CELL_SIZE);
 };
