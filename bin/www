@@ -73,6 +73,7 @@ io.sockets.on('connection', function(socket){
 	
 	socket.on('click', function(i) {
 		field[i] = 1;
+		io.sockets.emit('send', field);
 	});
 });
 
