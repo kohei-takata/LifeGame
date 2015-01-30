@@ -34,7 +34,7 @@ var io = require('socket.io').listen(server);
 
 var SCREEN_SIZE = 500;                    // キャンバスの幅
 var SIDE_CELLS = 100;                     // 一辺のセルの数
-var FPS = 10;                             // フレームレート
+var FPS = 20;                             // フレームレート
 
 var field = new Array(SIDE_CELLS*SIDE_CELLS); // フィールド情報
 var tempField = new Array(SIDE_CELLS*SIDE_CELLS); // フィールド情報の一時記憶用
@@ -65,7 +65,7 @@ function update() {
 		} else field[i] = 0; // 「死」
 	}
 	io.sockets.emit('send', field);                                    // canvasを更新
-	setTimeout(update, 5000/FPS); // 再帰
+	setTimeout(update, 10000/FPS); // 再帰
 }
 
 io.sockets.on('connection', function(socket){
