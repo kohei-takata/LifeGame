@@ -39,8 +39,10 @@ var FPS = 10;                             // フレームレート
 var field = new Array(SIDE_CELLS*SIDE_CELLS); // フィールド情報
 var tempField = new Array(SIDE_CELLS*SIDE_CELLS); // フィールド情報の一時記憶用
 // for (var i=0; i<field.length; i++) field[i] = Math.floor(Math.random()*2); // ランダムに「生」「死」を格納
+var initFlag = true;
 
 function update() {
+	if(initFlag) initFlag = false;
 	var n = 0;                    // 自身のまわりにある「生」の数
 	tempField = field.slice(); // 複製
 	for (var i=0; i<tempField.length; i++) {
@@ -67,7 +69,7 @@ function update() {
 }
 
 io.sockets.on('connection', function(socket){
-	update();
+	if(initFlag) update();
 	
 	socket.on('click', function(i) {
 		field[i] = 1;
