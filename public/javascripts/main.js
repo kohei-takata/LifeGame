@@ -19,6 +19,7 @@ window.onload = function() {
 	canvas.addEventListener('mouseout', onMouseOut, false);
 	document.addEventListener('keyup', onKeyup, false);
 	var mouseDownFlag = false;
+	var localNumber;
 	function onMouseDown(e) {
 		getLocalAddress(e);
 		mouseDownFlag = true;
@@ -36,12 +37,14 @@ window.onload = function() {
 		var rect = e.target.getBoundingClientRect();
 		var mouseX = Math.floor((e.pageX - rect.left)/5);
 		var mouseY = Math.floor(e.pageY/5);
-
-		var localNumber = mouseX + SIDE_CELLS * mouseY;
-		if(localField[localNumber] == null) {
-			localField[localNumber] = 1;
-		} else {
-			localField[localNumber] = null;
+		
+		if(localNumber != mouseX + SIDE_CELLS * mouseY) {
+			localNumber = mouseX + SIDE_CELLS * mouseY;
+			if(localField[localNumber] == null) {
+				localField[localNumber] = 1;
+			} else {
+				localField[localNumber] = null;
+			}
 		}
 	};
 	function onKeyup(e) {
