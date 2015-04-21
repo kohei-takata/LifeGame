@@ -12,5 +12,5 @@
 
 ***
 ※ゲームの根幹の部分は
-https://gist.github.com/ottatiyarou/6560440
+https://gist.github.com/ottati/6560440
 を参考にさせていただきました。
